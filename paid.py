@@ -9,7 +9,7 @@ import string
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('7973805250:AAHXkuzXKPdo40xkvyZX0bbaDSN4gY3qHiE')
+bot = telebot.TeleBot('7973805250:AAHuSAkBwS9tHG_Q3zKwYYjIbpb5WWwX1wM')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002252633433"
@@ -74,6 +74,12 @@ def redeem_key(message):
     user_id = message.from_user.id
     key = command[1]
 
+    # पहले से रिडीम किया हुआ चेक करें
+    if user_id in redeemed_users:
+        expiry = redeemed_users[user_id].strftime('%Y-%m-%d %H:%M')
+        bot.reply_to(message, f"✅ ALREADY REDEEMED!\n📅 Expiry: {expiry}")
+        return
+
     if key not in keys:
         bot.reply_to(message, "❌ INVALID KEY!")
         return
@@ -83,10 +89,12 @@ def redeem_key(message):
         del keys[key]
         return
 
+    # रिडीम प्रोसेस
     redeemed_users[user_id] = keys[key]
     del keys[key]
 
-    bot.reply_to(message, "🎉 SUCCESSFULLY REDEEMED! AB TU UNLIMITED ATTACK KAR SAKTA HAI 🚀", parse_mode="Markdown")
+    expiry = redeemed_users[user_id].strftime('%Y-%m-%d %H:%M')
+    bot.reply_to(message, f"🎉 SUCCESSFULLY REDEEMED!\n📅 Expiry: {expiry}", parse_mode="Markdown")
 
 # /MYINFO COMMAND
 @bot.message_handler(commands=['myinfo'])
