@@ -10,7 +10,7 @@ import pytz  # ✅ Timezone के लिए Import
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('7255347908:AAF08gmq-jkaeLtmCoB0r2p0C2tG3rNUF5k')
+bot = telebot.TeleBot('7973805250:AAE039stwTaUQqTAEzP0UkCEDlR9Iod_Rqk')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002252633433"
@@ -132,7 +132,7 @@ def my_info(message):
     info_msg = f"👤 **USER INFO**\n\n🆔 **Telegram ID:** `{user_id}`\n"
 
     if user_id in redeemed_users:
-        expiry = redeemed_users[user_id].strftime('%Y-%m-%d')
+        expiry = redeemed_users[user_id]["expiry"].strftime('%Y-%m-%d %H:%M IST')  # ✅ Fix
         info_msg += f"✅ **Access Granted:** Yes\n📅 **Expires on:** {expiry}\n"
     else:
         info_msg += "❌ **Access Granted:** No\n"
