@@ -116,7 +116,7 @@ def handle_attack(message):
 # AUTO ANNOUNCEMENT SYSTEM
 def auto_announcement():
     while True:
-        time.sleep(3600)  # 1 HOURS
+        time.sleep(1200)  # 1/2 HOURS
         bot.send_message(GROUP_ID, "📢 **GRP UPDATE:**PAID BOT AVAILABLE 👇
 FOR UNLIMITED ATTACKS
 
