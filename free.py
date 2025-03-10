@@ -116,28 +116,28 @@ def handle_attack(message):
 # AUTO ANNOUNCEMENT SYSTEM
 def auto_announcement():
     while True:
-        time.sleep(1200)  # 1/2 HOURS
-        bot.send_message(GROUP_ID, "📢 **GRP UPDATE:**PAID BOT AVAILABLE 👇
-FOR UNLIMITED ATTACKS
+        time.sleep(1800)  # 1/2 HOURS
+        bot.send_message(GROUP_ID, """📢 **GRP UPDATE:** PAID BOT AVAILABLE 👇
+    
+⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡  
+CHIPSET PRIZE  
+1 HOURS - 💸15  
+1 DAYS  - 💸60  
+2 DAYS  - 💸100  
+5 DAYS  - 💸220  
+7 DAYS  - 💸300  
 
-⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡
-CHIPSET PRIZE
-1 HAURS - 💸15 
-1 DAYS    - 💸60
-2 DAYS    - 💸100
-5 DAYS    - 💸220
-7 DAYS    - 💸300
+PAID GROUP LINK  
+👇👇👇  
+https://t.me/ONLYPAID_USER_77  
 
-PAID GROUP LINK
-👇👇👇
-https://t.me/ONLYPAID_USER_77
+BUY KARNE KE LIYE  
+DM - @R_SDanger  
 
-BUY KARNE KE LIYE 
-DM - @R_SDanger
-
-💸💸💸💸💸💸💸
-⚡⚡⚡⚡⚡⚡⚡
-🔥🔥🔥🔥🔥🔥 ! 🚀")
+💸💸💸💸💸💸💸  
+⚡⚡⚡⚡⚡⚡⚡  
+🔥🔥🔥🔥🔥🔥 ! 🚀
+""")
 
 # HANDLE SCREENSHOT SUBMISSION
 @bot.message_handler(content_types=['photo'])
