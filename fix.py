@@ -10,7 +10,7 @@ import pytz  # ✅ Timezone के लिए Import
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('7255347908:AAGdsnLPEsmP42jXmu_nZ6t4kGd0CJ0Mdq4')
+bot = telebot.TeleBot('7255347908:AAF08gmq-jkaeLtmCoB0r2p0C2tG3rNUF5k')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002252633433"
@@ -38,9 +38,19 @@ def is_user_in_channel(user_id):
     except:
         return False
 
-# FUNCTION TO GENERATE RANDOM KEYS
-def generate_key(length=10):
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+# ✅ FUNCTION TO GENERATE CUSTOM KEYS BASED ON TIME
+def generate_custom_key(days=0, hours=0):
+    time_label = ""
+    
+    if days > 0:
+        time_label = f"{days}D"
+    elif hours > 0:
+        time_label = f"{hours}H"
+    else:
+        time_label = "UNL"
+
+    random_text = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    return f"{time_label}RSDANGER{random_text}"
 
 # ✅ FIXED: /GENKEY COMMAND (ADMIN ONLY)
 @bot.message_handler(commands=['genkey'])
@@ -65,8 +75,8 @@ def generate_access_key(message):
     expiry_date = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=days, hours=hours)
     expiry_date = expiry_date.astimezone(IST)
 
-    new_key = generate_key()
-    keys[new_key] = expiry_date
+    new_key = generate_custom_key(days, hours)  # ✅ नई Key जनरेट करो
+    keys[new_key] = expiry_date  # ✅ Key Store करो
 
     bot.reply_to(message, f"✅ NEW KEY GENERATED:\n🔑 `{new_key}`\n📅 Expiry: {expiry_date.strftime('%Y-%m-%d %H:%M IST')}", parse_mode="Markdown")
 
@@ -92,10 +102,18 @@ def redeem_key(message):
     user_id = message.from_user.id
     key = command[1]
 
+    # ✅ अगर key पहले से redeem हो चुकी है, तो user details दिखाओ
+    for uid, data in redeemed_users.items():
+        if data["key"] == key:
+            bot.reply_to(message, f"❌ **YE KEY ALREADY REDEEMED HO CHUKI HAI!**\n👤 **Redeemed By:** `{uid}`\n📅 **Expiry:** {data['expiry'].strftime('%Y-%m-%d %H:%M IST')}", parse_mode="Markdown")
+            return
+
+    # ✅ अगर key invalid है
     if key not in keys:
-        bot.reply_to(message, "❌ **INVALID YA ALREADY REDEEMED KEY!**")
+        bot.reply_to(message, "❌ **INVALID KEY!**")
         return
 
+    # ✅ Expired key check
     if datetime.datetime.now(IST) > keys[key]:
         bot.reply_to(message, "⏳ **YE KEY EXPIRED HO CHUKI HAI!**")
         del keys[key]
