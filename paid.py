@@ -9,7 +9,7 @@ import string
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('7973805250:AAHuSAkBwS9tHG_Q3zKwYYjIbpb5WWwX1wM')
+bot = telebot.TeleBot('7973805250:AAFoaCgWQeP6_ghrSkR18o9JER-Hfb3h8u0')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002252633433"
@@ -185,11 +185,7 @@ def handle_screenshot(message):
         bot.reply_to(message, "❌ TERA KOI PENDING ATTACK NAHI HAI! BAKCHODI BAND KAR!")
         return
 
-    caption_text = f"✅ **PAID-BOT SCREENSHOT RECEIVED!**\n👤 **User ID:** `{user_id}`\n📸 **Screenshot Verification Done!**"
-    
-    bot.send_photo(SCREENSHOT_CHANNEL, message.photo[-1].file_id, caption=caption_text, parse_mode="Markdown")
-    
-    del pending_feedback[user_id]
+    caption_text = f"✅ **PAID-USER SCREENSHOT RECEIVED!**\n👤 **User ID:** `{user_id}`\n📸 **Screenshot Verification Done!**"
 
     bot.reply_to(message, "✅ SCREENSHOT VERIFY HO GAYA! AB TU NAYA ATTACK KAR SAKTA HAI 🔥")
 

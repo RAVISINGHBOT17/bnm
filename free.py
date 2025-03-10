@@ -7,7 +7,7 @@ import threading
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('8048715452:AAFvvHPK-_JHNlz0qG5dAhjHrewPJ85mcnM')
+bot = telebot.TeleBot('8048715452:AAEZvIkbIVm8b5qetaC4UeL5zq02N_LzGg8')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002369239894"
@@ -35,8 +35,8 @@ def is_user_in_channel(user_id):
 def verify_screenshot(user_id, message):
     if user_id in pending_feedback:
         bot.forward_message(SCREENSHOT_CHANNEL, message.chat.id, message.message_id)
-        bot.send_message(SCREENSHOT_CHANNEL, f"📸 **PAID*USER `{user_id}` KA SCREENSHOT VERIFIED!** ✅")
-        bot.reply_to(message, "✅ PAID GROUP KA SCREENSHOT MIL GAYA! AB TU NAYA ATTACK LAGA SAKTA HAI. 🚀")
+        bot.send_message(SCREENSHOT_CHANNEL, f"📸 **FREE*USER `{user_id}` KA SCREENSHOT VERIFIED!** ✅")
+        bot.reply_to(message, f"📸 **FREE*USER `{user_id}` KA SCREENSHOT VERIFIED!** ✅")
         del pending_feedback[user_id]  
     else:
         bot.reply_to(message, "❌ AB SCREENSHOT BHEJNE KI ZAROORAT NAHI HAI!")
@@ -116,8 +116,28 @@ def handle_attack(message):
 # AUTO ANNOUNCEMENT SYSTEM
 def auto_announcement():
     while True:
-        time.sleep(21600)  # 6 HOURS
-        bot.send_message(GROUP_ID, "📢 **GRP UPDATE:** RULES FOLLOW KARO, WARNA BAN PAKKA! 🚀")
+        time.sleep(3600)  # 1 HOURS
+        bot.send_message(GROUP_ID, "📢 **GRP UPDATE:**PAID BOT AVAILABLE 👇
+FOR UNLIMITED ATTACKS
+
+⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡
+CHIPSET PRIZE
+1 HAURS - 💸15 
+1 DAYS    - 💸60
+2 DAYS    - 💸100
+5 DAYS    - 💸220
+7 DAYS    - 💸300
+
+PAID GROUP LINK
+👇👇👇
+https://t.me/ONLYPAID_USER_77
+
+BUY KARNE KE LIYE 
+DM - @R_SDanger
+
+💸💸💸💸💸💸💸
+⚡⚡⚡⚡⚡⚡⚡
+🔥🔥🔥🔥🔥🔥 ! 🚀")
 
 # HANDLE SCREENSHOT SUBMISSION
 @bot.message_handler(content_types=['photo'])
@@ -130,7 +150,7 @@ def handle_screenshot(message):
 def restart_bot(message):
     if message.from_user.id in ADMINS:
         bot.send_message(message.chat.id, "♻️ BOT RESTART HO RAHA HAI...")
-        time.sleep(2)
+        time.sleep(1)
         subprocess.run("python3 m.py", shell=True)
     else:
         bot.reply_to(message, "🚫 SIRF ADMIN HI RESTART KAR SAKTA HAI!")
