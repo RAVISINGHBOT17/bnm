@@ -10,7 +10,7 @@ import pytz  # ✅ Timezone के लिए Import
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('7973805250:AAF7UYNxzTbTbLPtZjdy2xrtHt893XDlRlw')
+bot = telebot.TeleBot('7973805250:AAFCWBD-moWYmZe0jFlv6o3OlA3tAFBlyy4')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002252633433"
@@ -196,49 +196,6 @@ def handle_attack(message):
             bot.send_message(message.chat.id, "✅ ATTACK KHATAM! 📸 SCREENSHOT BHEJOGE TO CHANNEL PE CHALA JAYEGA!🎯")
 
     threading.Thread(target=attack_execution).start()
-
-# ✅ PERMANENT BUY BUTTON SYSTEM
-@bot.message_handler(func=lambda message: True)
-def always_show_buy_button(message):
-    if message.chat.type == "private":  # सिर्फ DM में शो होगा
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
-        buy_button = types.KeyboardButton("💰 BUY NOW 💰")
-        markup.add(buy_button)
-        bot.send_message(message.chat.id, "👇 CHOOSE AN OPTION 👇", reply_markup=markup)
-
-# ✅ BUY BUTTON RESPONSE WITH PRICE LIST
-@bot.message_handler(func=lambda message: message.text == "💰 BUY NOW 💰")
-def buy_button_response(message):
-    price_list = """
-🔥 **PRICING LIST** 🔥
-
-🟢 **Basic Plan** – ₹20 (2 HAURS)
-🔵 **Standard Plan** – ₹60 (1 DAY)
-🟣 **Premium Plan** – ₹160 (3 DAYS)
-🔴 **VIP Plan** – ₹320 (7 DAYS)
-
-⚡ **BUY NOW:** @R_SDanger
-    """
-    bot.send_message(message.chat.id, price_list, parse_mode="Markdown")
-
-# ✅ START COMMAND – WELCOME + ALL COMMANDS LIST
-@bot.message_handler(commands=['start'])
-def start_command(message):
-    welcome_text = f"""
-👋 **WELCOME TO R_SDANGER BOT!** 🤖
-
-🔥 **AVAILABLE COMMANDS:** 🔥
-
-🔹 `/buy` - 🛒 **प्राइस लिस्ट और खरीदने का ऑप्शन दिखाएगा**  
-🔹 `/genkey <DAYS> [HOURS]` - 🔑 **KEY BNANE KE LIYE (ONLY FOR @R_SDanger)**  
-🔹 `/redeem <KEY>` - 🎟️ **ACCESS KE LIYE**  
-🔹 `/myinfo` - ℹ️ **USER INFORMATION **  
-🔹 `/RS <IP> <PORT> <TIME>` - 🚀 **CHUDAI KARNE KE LIYE**  
-🔹 `/check` - 📊 **CHECKING RUNNING **  
-
-⚡ **FOR SUPPORT & PURCHASE:** @R_SDanger  
-    """
-    bot.send_message(message.chat.id, welcome_text, parse_mode="Markdown")
 
 # ✅ Existing /CHECK Command (No Change)
 @bot.message_handler(commands=['check'])
