@@ -41,7 +41,6 @@ redeemed_users = data["redeemed_users"]
 user_attack_count = data["user_attack_count"]
 
 # GLOBAL VARIABLES (Use Already Loaded Data)
-is_attack_running = False
 pending_feedback = {}
 warn_count = {}
 attack_logs = []
@@ -201,7 +200,7 @@ def handle_attack(message):
         bot.reply_to(message, "🚫 240S SE ZYADA ALLOWED NAHI HAI!")
         return
 
-    confirm_msg = f"🔥 ATTACK DETAILS:\n🎯 TARGET: `{target}`\n🔢 PORT: `{port}`\n⏳ DURATION: `{time_duration}S`\nSTATUS: `CHAL RAHA HAI...`"
+    confirm_msg = f"🔥 ATTACK DETAILS:\n🎯 TARGET: `{target}`\n🔢 PORT: `{port}`\n⏳ DURATION: `{time_duration}S`\nSTATUS: `CHAL RAHA HAI...`! SCREENSHOT SEND KR CHANNEL PE FORWORD HOGA"
     bot.send_message(message.chat.id, confirm_msg, parse_mode="Markdown")
 
     attack_info = {"user_id": user_id, "target": target, "port": port, "time": time_duration}
@@ -221,15 +220,6 @@ def handle_attack(message):
             bot.send_message(message.chat.id, "✅ ATTACK KHATAM! 📸 SCREENSHOT BHEJOGE TO CHANNEL PE CHALA JAYEGA!")
 
     threading.Thread(target=attack_execution).start()
-
-# HANDLE CHECK COMMAND
-@bot.message_handler(commands=['check'])
-def check_status(message):
-    if is_attack_running:
-        remaining_time = (attack_end_time - datetime.datetime.now()).total_seconds()
-        bot.reply_to(message, f"✅ **ATTACK CHAL RAHA HAI!**\n⏳ **BACHI HUI TIME:** {int(remaining_time)}S")
-    else:
-        bot.reply_to(message, "❌ KOI ATTACK ACTIVE NAHI HAI!")
 
 # ✅ START BOT
 bot.polling(none_stop=True)
