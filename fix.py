@@ -6,6 +6,8 @@ import subprocess
 import threading
 import random
 import string
+import json
+import os
 import pytz  # ✅ Timezone के लिए Import
 from telebot import types
 
@@ -17,6 +19,26 @@ GROUP_ID = "-1002252633433"
 CHANNEL_USERNAME = "@KHAPITAR_BALAK77"
 SCREENSHOT_CHANNEL = "@KHAPITAR_BALAK77"
 ADMINS = [7129010361]  # Admin IDs
+
+# ✅ Data Save करने के लिए JSON फाइल
+DATA_FILE = "bot_data.json"
+
+# ✅ बॉट स्टार्ट होते ही डेटा लोड करो
+def load_data():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r") as f:
+            return json.load(f)
+    return {"redeemed_users": {}, "user_attack_count": {}}
+
+# ✅ डेटा सेव करने का फंक्शन
+def save_data():
+    with open(DATA_FILE, "w") as f:
+        json.dump({"redeemed_users": redeemed_users, "user_attack_count": user_attack_count}, f)
+
+# ✅ पहले से सेव किया हुआ डेटा लोड करो
+data = load_data()
+redeemed_users = data["redeemed_users"]
+user_attack_count = data["user_attack_count"]
 
 # GLOBAL VARIABLES
 pending_feedback = {}
