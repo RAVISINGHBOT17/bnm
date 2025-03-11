@@ -12,7 +12,7 @@ import pytz  # ✅ Timezone के लिए Import
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('7973805250:AAGmk20LlTLt9JHJhIETjKRJG03FDDUYLbc')
+bot = telebot.TeleBot('7973805250:AAHilAprlS568N2B4OYNec-mt-GHcrknr4c')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002252633433"
@@ -32,6 +32,7 @@ def load_data():
 
 # ✅ डेटा सेव करने का फंक्शन
 def save_data():
+    global redeemed_users, user_attack_count  # ✅ Add this line
     with open(DATA_FILE, "w") as f:
         json.dump({"redeemed_users": redeemed_users, "user_attack_count": user_attack_count}, f)
 
@@ -126,11 +127,18 @@ def redeem_key(message):
     user_id = message.from_user.id
     key = command[1]
 
-    # ✅ अगर यूजर पहले से key redeem कर चुका है और उसकी expiry बाकी है, तो block कर दो
+    # ✅ Check if key was already redeemed
+    already_redeemed = False
+    for uid, details in redeemed_users.items():
+        if details["key"] == key:
+            already_redeemed = True
+            break  # No need to check further
+
+    # ✅ अगर यूजर पहले से ही key यूज़ कर चुका है और valid है
     if user_id in redeemed_users:
         expiry_time = redeemed_users[user_id]["expiry"]
         if datetime.datetime.now(IST) < expiry_time:
-            bot.reply_to(message, f"❌ **TU PHLE HI EK KEY REDEEM KAR CHUKA HAI!**\n📅 **Expire Date:** {expiry_time.strftime('%Y-%m-%d %H:%M IST')}\n🔁 **Dubara Redeem Karne Ke Liye Purani Key Expire Hone Ka Wait Kar!**", parse_mode="Markdown")
+            bot.reply_to(message, f"❌ **TU PHLE HI EK KEY REDEEM KAR CHUKA HAI!**\n📅 **Expire Date:** {expiry_time.strftime('%Y-%m-%d %H:%M IST')}\n🔁 **Purani Key Expire Hone Ka Wait Kar!**", parse_mode="Markdown")
             return
 
     # ✅ अगर key invalid है
@@ -148,7 +156,10 @@ def redeem_key(message):
     redeemed_users[user_id] = {"key": key, "expiry": expiry}  # ✅ Update Redeemed Users
     del keys[key]  # ✅ Key को हटाओ, क्योंकि अब यूजर ने इसे यूज़ कर लिया है
 
-    bot.reply_to(message, f"🎉 **SUCCESSFULLY REDEEMED!**\n📅 **Expiry:** {expiry.strftime('%Y-%m-%d %H:%M IST')}", parse_mode="Markdown")
+    # ✅ अगर पहले से redeem हो चुकी थी, तो warning दे
+    warning_msg = "⚠️ **WARNING:** YE KEY PEHLE BHI REDEEM HO CHUKI THI, PAR ABHI PHIR BHI REDEEM KAR DIYI GAI!" if already_redeemed else ""
+
+    bot.reply_to(message, f"🎉 **SUCCESSFULLY REDEEMED!**\n📅 **Expiry:** {expiry.strftime('%Y-%m-%d %H:%M IST')}\n\n{warning_msg}", parse_mode="Markdown")
 
 # /MYINFO COMMAND
 @bot.message_handler(commands=['myinfo'])
