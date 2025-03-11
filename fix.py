@@ -41,6 +41,7 @@ redeemed_users = data["redeemed_users"]
 user_attack_count = data["user_attack_count"]
 
 # GLOBAL VARIABLES (Use Already Loaded Data)
+is_attack_running = False
 pending_feedback = {}
 warn_count = {}
 attack_logs = []
