@@ -240,25 +240,4 @@ def check_attacks(message):
     bot.send_message(message.chat.id, check_msg, parse_mode="Markdown")
 
 # START BOT
-@bot.message_handler(commands=['start'])
-def start_command(message):
-    start_msg = """🔥 **RS DANGER BOT** 🔥
-    
-👋 **WELCOME TO RS DANGER BOT!**  
-🚀 **HERE ARE ALL AVAILABLE COMMANDS:**
-
-🔹 `/start` - **View bot info & commands**  
-🔹 `/redeem <KEY>` - **Redeem key to get access**  
-🔹 `/genkey <DAYS> [HOURS]` - **Generate new key (Admin Only)**  
-🔹 `/RS <IP> <PORT> <TIME>` - **Launch an attack (Max 3 at a time)**  
-🔹 `/check` - **Check all active attacks**  
-🔹 `/myinfo` - **View your details (ID, Attacks, Expiry, etc.)**  
-
-📌 **IMPORTANT RULES:**  
-- **Max 3 attacks can run at the same time.**  
-- **Each attack is limited to 240 seconds.**  
-- **Screenshot verification system is enabled.**  
-
-⚡ **BOT DEV:** [@R_SDanger](https://t.me/R_SDanger)
-"""
-    bot.send_message(message.chat.id, start_msg, parse_mode="Markdown", disable_web_page_preview=True)
+bot.polling(none_stop=True)
