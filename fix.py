@@ -221,37 +221,14 @@ def handle_attack(message):
 
     threading.Thread(target=attack_execution).start()
 
-# ✅ Existing /CHECK Command (No Change)
+# HANDLE CHECK COMMAND
 @bot.message_handler(commands=['check'])
-def check_attacks(message):
-    global active_attacks
-
-    # ✅ Expired अटैक्स को हटाओ
-    current_time = time.time()
-    active_attacks = [attack for attack in active_attacks if attack['end_time'] > current_time]
-
-    if not active_attacks:
-        bot.reply_to(message, "❌ KOI BHI ATTACK ACTIVE NAHI HAI!")
-        return
-
-    check_msg = "📊 **ACTIVE ATTACKS:**\n\n"
-    for idx, attack in enumerate(active_attacks, start=1):
-        remaining_time = int(attack['end_time'] - current_time)
-        check_msg += f"🔹 **Attack {idx}**\n👤 **User:** `{attack['user_id']}`\n🎯 **Target:** `{attack['target']}:{attack['port']}`\n⏳ **Time Left:** `{remaining_time}s`\n\n"
-
-    bot.send_message(message.chat.id, check_msg, parse_mode="Markdown")
-
-# ✅ Auto-Save Every 5 Minutes
-def auto_save():
-    while True:
-        time.sleep(300)  # हर 5 मिनट में सेव करो
-        save_data()
-
-# ✅ Start Auto-Save Thread
-threading.Thread(target=auto_save, daemon=True).start()
+def check_status(message):
+    if is_attack_running:
+        remaining_time = (attack_end_time - datetime.datetime.now()).total_seconds()
+        bot.reply_to(message, f"✅ **ATTACK CHAL RAHA HAI!**\n⏳ **BACHI HUI TIME:** {int(remaining_time)}S")
+    else:
+        bot.reply_to(message, "❌ KOI ATTACK ACTIVE NAHI HAI!")
 
 # ✅ START BOT
-bot.polling(none_stop=True)
-
-# START BOT
 bot.polling(none_stop=True)
