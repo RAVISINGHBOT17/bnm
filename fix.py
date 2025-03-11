@@ -12,7 +12,7 @@ import pytz  # ✅ Timezone के लिए Import
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('7973805250:AAEZ6PmKr20bZ__qX7DqZVBGyRD-PTiyTfg')
+bot = telebot.TeleBot('7973805250:AAGmk20LlTLt9JHJhIETjKRJG03FDDUYLbc')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002252633433"
@@ -40,14 +40,16 @@ data = load_data()
 redeemed_users = data["redeemed_users"]
 user_attack_count = data["user_attack_count"]
 
-# GLOBAL VARIABLES
+# GLOBAL VARIABLES (Use Already Loaded Data)
 pending_feedback = {}
 warn_count = {}
 attack_logs = []
-user_attack_count = {}
 keys = {}
-redeemed_users = {}
 active_attacks = []
+
+# ✅ Load existing data instead of resetting
+redeemed_users = data["redeemed_users"]
+user_attack_count = data["user_attack_count"]]
 
 # ✅ IST Timezone सेट करो (New Delhi)
 IST = pytz.timezone('Asia/Kolkata')
@@ -238,6 +240,18 @@ def check_attacks(message):
         check_msg += f"🔹 **Attack {idx}**\n👤 **User:** `{attack['user_id']}`\n🎯 **Target:** `{attack['target']}:{attack['port']}`\n⏳ **Time Left:** `{remaining_time}s`\n\n"
 
     bot.send_message(message.chat.id, check_msg, parse_mode="Markdown")
+
+# ✅ Auto-Save Every 5 Minutes
+def auto_save():
+    while True:
+        time.sleep(300)  # हर 5 मिनट में सेव करो
+        save_data()
+
+# ✅ Start Auto-Save Thread
+threading.Thread(target=auto_save, daemon=True).start()
+
+# ✅ START BOT
+bot.polling(none_stop=True)
 
 # START BOT
 bot.polling(none_stop=True)
