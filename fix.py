@@ -49,7 +49,7 @@ active_attacks = []
 
 # ✅ Load existing data instead of resetting
 redeemed_users = data["redeemed_users"]
-user_attack_count = data["user_attack_count"]]
+user_attack_count = data["user_attack_count"]
 
 # ✅ IST Timezone सेट करो (New Delhi)
 IST = pytz.timezone('Asia/Kolkata')
