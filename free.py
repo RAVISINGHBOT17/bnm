@@ -7,7 +7,7 @@ import threading
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('8048715452:AAEZvIkbIVm8b5qetaC4UeL5zq02N_LzGg8')
+bot = telebot.TeleBot('8048715452:AAEnzBwC0dyPtvrJvy6oDwp1jSCRomfhDLw')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002369239894"
@@ -116,12 +116,12 @@ def handle_attack(message):
 # AUTO ANNOUNCEMENT SYSTEM
 def auto_announcement():
     while True:
-        time.sleep(1800)  # 1/2 HOURS
+        time.sleep(7200)  # 2 HOURS
         bot.send_message(GROUP_ID, """📢 **GRP UPDATE:** PAID BOT AVAILABLE 👇
     
 ⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡  
 CHIPSET PRIZE  
-1 HOURS - 💸15  
+1 HOURS -💸15  
 1 DAYS  - 💸60  
 2 DAYS  - 💸100  
 5 DAYS  - 💸220  
