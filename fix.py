@@ -12,7 +12,7 @@ import pytz  # ✅ Timezone के लिए Import
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('7973805250:AAGYSoPv9QUh-8OTkTGO15kY0P252ZuZZU4')
+bot = telebot.TeleBot('7973805250:AAEZ6PmKr20bZ__qX7DqZVBGyRD-PTiyTfg')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002252633433"
