@@ -10,7 +10,7 @@ import pytz  # ✅ Timezone के लिए Import
 from telebot import types
 
 # TELEGRAM BOT TOKEN
-bot = telebot.TeleBot('7973805250:AAFCWBD-moWYmZe0jFlv6o3OlA3tAFBlyy4')
+bot = telebot.TeleBot('7973805250:AAGYSoPv9QUh-8OTkTGO15kY0P252ZuZZU4')
 
 # GROUP AND CHANNEL DETAILS
 GROUP_ID = "-1002252633433"
@@ -102,10 +102,11 @@ def redeem_key(message):
     user_id = message.from_user.id
     key = command[1]
 
-    # ✅ अगर key पहले से redeem हो चुकी है, तो user details दिखाओ
-    for uid, data in redeemed_users.items():
-        if data["key"] == key:
-            bot.reply_to(message, f"❌ **YE KEY ALREADY REDEEMED HO CHUKI HAI!**\n👤 **Redeemed By:** `{uid}`\n📅 **Expiry:** {data['expiry'].strftime('%Y-%m-%d %H:%M IST')}", parse_mode="Markdown")
+    # ✅ अगर यूजर पहले से key redeem कर चुका है और उसकी expiry बाकी है, तो block कर दो
+    if user_id in redeemed_users:
+        expiry_time = redeemed_users[user_id]["expiry"]
+        if datetime.datetime.now(IST) < expiry_time:
+            bot.reply_to(message, f"❌ **TU PHLE HI EK KEY REDEEM KAR CHUKA HAI!**\n📅 **Expire Date:** {expiry_time.strftime('%Y-%m-%d %H:%M IST')}\n🔁 **Dubara Redeem Karne Ke Liye Purani Key Expire Hone Ka Wait Kar!**", parse_mode="Markdown")
             return
 
     # ✅ अगर key invalid है
@@ -120,8 +121,8 @@ def redeem_key(message):
         return
 
     expiry = keys[key]
-    redeemed_users[user_id] = {"key": key, "expiry": expiry}
-    del keys[key]
+    redeemed_users[user_id] = {"key": key, "expiry": expiry}  # ✅ Update Redeemed Users
+    del keys[key]  # ✅ Key को हटाओ, क्योंकि अब यूजर ने इसे यूज़ कर लिया है
 
     bot.reply_to(message, f"🎉 **SUCCESSFULLY REDEEMED!**\n📅 **Expiry:** {expiry.strftime('%Y-%m-%d %H:%M IST')}", parse_mode="Markdown")
 
